@@ -1,0 +1,180 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+
+{% extends "template.njk" %}
+
+<!-- You may want to make further use of these components: https://design-system.service.gov.uk/components/
+but ultimately it is up to you -->
+
+
+{% block content %}
+  <h1 class="govuk-heading-xl">Task</h1>
+
+  <!-- The freedom is yours. You can design the solution however you like, however there is a starting point provided
+  to ensure you have both services running. You may want to make use of the Gov UK Components:
+  https://design-system.service.gov.uk/components/ to add tabs and so forth :) -->
+
+<form action="/update-task/{{id}}" method="post">
+  {% call govukFieldset({
+    legend: {
+      text: "Update Task",
+      classes: "govuk-fieldset__legend--l",
+      isPageHeading: true
+    }
+    }) %}
+
+{% if error.code == "title" %}
+
+  {{ govukInput({
+    label: {
+      text: "Title"
+    },
+    id: "title",
+    name: "title",
+    autocomplete: "title",
+    errorMessage: {
+      text:error.message
+    },
+    items: [{
+      classes: "govuk-input--width-2 govuk-input--error",
+      name: "title",
+      value: task.title
+    }]
+  }) }}
+
+{% else %} 
+
+  {{ govukInput({
+    label: {
+      text: "Title"
+    },
+    id: "title",
+    name: "title",
+    autocomplete: "title",
+    value: task.title
+  }) }}
+{% endif %}  
+
+  {{ govukInput({
+    label: {
+      text: "Description (optional)"
+    },
+    id: "description",
+    name: "description",
+    autocomplete: "description",
+    value: task.description
+
+  }) }}
+
+{% if error.code == "due-date" %}
+  {{ govukDateInput({
+    id: "due-date",
+    namePrefix: "due-date",
+    fieldset: {
+      legend: {
+        text: "When is the task due?",
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },
+    hint: {
+      text: "For example, 27 3 2007"
+    },
+    errorMessage: {
+      text: error.message
+    },
+    items: [
+    {
+      classes: "govuk-input--width-2 govuk-input--error",
+      name: "day",
+      value: task["due-date-day"]
+    },
+    {
+      classes: "govuk-input--width-2 govuk-input--error",
+      name: "month",
+      value: task["due-date-month"]
+    },
+    {
+      classes: "govuk-input--width-4 govuk-input--error",
+      name: "year",
+      value: task["due-date-year"]
+    }
+    ]
+  }) }}
+
+{% else %}
+    {{ govukDateInput({
+    id: "due-date",
+    namePrefix: "due-date",
+    fieldset: {
+      legend: {
+        text: "When is the task due?",
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },
+    hint: {
+      text: "For example, 27 3 2007"
+    },
+    items: [
+    {
+      classes: "govuk-input--width-2",
+      name: "day",
+      value: day
+    },
+    {
+      classes: "govuk-input--width-2",
+      name: "month",
+      value: month+1
+    },
+    {
+      classes: "govuk-input--width-4",
+      name: "year",
+      value: year
+    }
+    ]
+  }) }}
+
+{{ govukRadios({
+  name: "status",
+  fieldset: {
+    legend: {
+      text: "Task Status",
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  },
+  value: task.status,
+  items: [
+    {
+      value: "Open",
+      text: "Open"
+    },
+    {
+      value: "Closed",
+      text: "Closed"
+    }
+  ]
+}) }}
+
+{% endif %}
+ 
+  {{ govukButton({
+    text: "Update Task",
+    isStartButton: false
+  }) }}
+
+  {{ govukButton({
+    text: "Show All Tasks",
+    href: "/tasks",
+    isStartButton: false
+  }) }}
+
+{% endcall %}
+</form>
+
+{% endblock %}

@@ -1,0 +1,80 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends "template.njk" %}
+
+<!-- You may want to make further use of these components: https://design-system.service.gov.uk/components/
+but ultimately it is up to you -->
+
+
+{% block content %}
+  <h1 class="govuk-heading-xl">Task</h1>
+
+  <!-- The freedom is yours. You can design the solution however you like, however there is a starting point provided
+  to ensure you have both services running. You may want to make use of the Gov UK Components:
+  https://design-system.service.gov.uk/components/ to add tabs and so forth :) -->
+
+  {% if task %} 
+
+{{ govukSummaryList({
+      rows: [
+        {
+          key: {
+            text: "ID"
+          },
+          value: {
+            text: task.systemId
+          },          
+          classes: "govuk-summary-list__row--no-actions"
+        },
+        {
+          key: {
+            text: "Title"
+          },
+          value: {
+            html: task.title
+          }
+        },
+        {
+          key: {
+            text: "Description"
+          },
+          value: {
+            html: task.description
+          }
+        },
+        {
+          key: {
+            text: "Status"
+          },
+          value: {
+            html: task.status
+          }          
+        },
+        {
+          key: {
+           text: "Due Date"
+          },
+          value: {
+           html: task.dueDate
+          }          
+        }
+      ]
+    }) }}
+
+     
+  {{ govukButton({
+    text: "Show All Tasks",
+    href: "/tasks",
+    isStartButton: false
+  }) }}
+
+    {{ govukButton({
+    text: "Edit Task",
+    href: "/update-task/"+ task.systemId,
+    isStartButton: false
+  }) }}
+
+  {% endif %}
+
+{% endblock %}
