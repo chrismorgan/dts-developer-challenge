@@ -23,6 +23,7 @@ The frontend is able to:
 - Create, view, update, and delete tasks
 - Display tasks in a user-friendly interface
 - Uses the govUK design system to render the pages consistently
+- Validation has been added to only allow future due dates
 
 ### To use the Application
 Docker required
